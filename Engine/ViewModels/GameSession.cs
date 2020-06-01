@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Engine.Models;
+﻿using System.Linq;
 using Engine.Factories;
+using Engine.Models;
 
 namespace Engine.ViewModels
 {
@@ -15,18 +10,21 @@ namespace Engine.ViewModels
 
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
+
         public Location CurrentLocation
         {
-            get { return _currentLocation;}
+            get { return _currentLocation; }
             set
             {
                 _currentLocation = value;
 
                 OnPropertyChanged(nameof(CurrentLocation));
                 OnPropertyChanged(nameof(HasLocationToNorth));
-                OnPropertyChanged(nameof(HasLocationToSouth));
                 OnPropertyChanged(nameof(HasLocationToEast));
                 OnPropertyChanged(nameof(HasLocationToWest));
+                OnPropertyChanged(nameof(HasLocationToSouth));
+
+                GivePlayerQuestsAtLocation();
             }
         }
 
@@ -42,7 +40,7 @@ namespace Engine.ViewModels
         {
             get
             {
-                return CurrentWorld.LocationAt(CurrentLocation.XCoordinate +1, CurrentLocation.YCoordinate) != null;
+                return CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null;
             }
         }
 
@@ -58,21 +56,21 @@ namespace Engine.ViewModels
         {
             get
             {
-                return CurrentWorld.LocationAt(CurrentLocation.XCoordinate -1, CurrentLocation.YCoordinate) != null;
+                return CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null;
             }
         }
 
         public GameSession()
         {
             CurrentPlayer = new Player
-                            {
-                                Name = "Jonathan",
-                                CharacterClass = "Fighter",
-                                HitPoints = 10,
-                                Gold = 1000000,
-                                ExperiencePoints = 0,
-                                Level = 1
-                            };
+            {
+                Name = "Jonathan",
+                CharacterClass = "Fighter",
+                HitPoints = 10,
+                Gold = 1000000,
+                ExperiencePoints = 0,
+                Level = 1
+            };
 
             CurrentWorld = WorldFactory.CreateWorld();
 
@@ -81,7 +79,7 @@ namespace Engine.ViewModels
 
         public void MoveNorth()
         {
-            if(HasLocationToNorth)
+            if (HasLocationToNorth)
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1);
             }
@@ -89,7 +87,7 @@ namespace Engine.ViewModels
 
         public void MoveEast()
         {
-            if(HasLocationToEast)
+            if (HasLocationToEast)
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate);
             }
@@ -97,7 +95,7 @@ namespace Engine.ViewModels
 
         public void MoveSouth()
         {
-            if(HasLocationToSouth)
+            if (HasLocationToSouth)
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1);
             }
@@ -105,9 +103,20 @@ namespace Engine.ViewModels
 
         public void MoveWest()
         {
-            if(HasLocationToWest)
+            if (HasLocationToWest)
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate);
+            }
+        }
+
+        private void GivePlayerQuestsAtLocation()
+        {
+            foreach (Quest quest in CurrentLocation.QuestsAvailableHere)
+            {
+                if (!CurrentPlayer.Quests.Any(q => q.PlayerQuest.ID == quest.ID))
+                {
+                    CurrentPlayer.Quests.Add(new QuestStatus(quest));
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(Name));
             }
         }
+
         public string CharacterClass
         {
             get { return _characterClass; }
@@ -35,6 +36,7 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(CharacterClass));
             }
         }
+
         public int HitPoints
         {
             get { return _hitPoints; }
@@ -44,6 +46,7 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(HitPoints));
             }
         }
+
         public int ExperiencePoints
         {
             get { return _experiencePoints; }
@@ -53,6 +56,7 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(ExperiencePoints));
             }
         }
+
         public int Level
         {
             get { return _level; }
@@ -62,6 +66,7 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(Level));
             }
         }
+
         public int Gold
         {
             get { return _gold; }
@@ -74,9 +79,12 @@ namespace Engine.Models
 
         public ObservableCollection<GameItem> Inventory { get; set; }
 
+        public ObservableCollection<QuestStatus> Quests { get; set; }
+
         public Player()
         {
             Inventory = new ObservableCollection<GameItem>();
+            Quests = new ObservableCollection<QuestStatus>();
         }
     }
 }
