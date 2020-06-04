@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace Engine.Models
 {
@@ -38,7 +33,7 @@ namespace Engine.Models
             int rewardExperiencePoints, int rewardGold)
         {
             Name = name;
-            ImageName = string.Format("/Engine;component/Images/Monsters/{0}", imageName);
+            ImageName = $"/Engine;component/Images/Monsters/{imageName}";
             MaximumHitPoints = maximumHitPoints;
             HitPoints = hitPoints;
             MinimumDamage = minimumDamage;
