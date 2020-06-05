@@ -16,14 +16,16 @@ namespace Engine.Models
         public List<MonsterEncounter> MonstersHere { get; set; } =
             new List<MonsterEncounter>();
 
+        public Trader TraderHere { get; set; }
+
         public void AddMonster(int monsterID, int chanceOfEncountering)
         {
-            if(MonstersHere.Exists(m => m.MonsterID == monsterID))
+            if (MonstersHere.Exists(m => m.MonsterID == monsterID))
             {
                 // This monster has already been added to this location.
                 // So, overwrite the ChanceOfEncountering with the new number.
                 MonstersHere.First(m => m.MonsterID == monsterID)
-                    .ChanceOfEncountering = chanceOfEncountering;
+                            .ChanceOfEncountering = chanceOfEncountering;
             }
             else
             {
@@ -34,7 +36,7 @@ namespace Engine.Models
 
         public Monster GetMonster()
         {
-            if(!MonstersHere.Any())
+            if (!MonstersHere.Any())
             {
                 return null;
             }
@@ -45,17 +47,17 @@ namespace Engine.Models
             // Select a random number between 1 and the total (in case the total chances is not 100).
             int randomNumber = RandomNumberGenerator.NumberBetween(1, totalChances);
 
-            // Loop through the monster list,
+            // Loop through the monster list, 
             // adding the monster's percentage chance of appearing to the runningTotal variable.
             // When the random number is lower than the runningTotal,
             // that is the monster to return.
             int runningTotal = 0;
 
-            foreach(MonsterEncounter monsterEncounter in MonstersHere)
+            foreach (MonsterEncounter monsterEncounter in MonstersHere)
             {
                 runningTotal += monsterEncounter.ChanceOfEncountering;
 
-                if(randomNumber <= runningTotal)
+                if (randomNumber <= runningTotal)
                 {
                     return MonsterFactory.GetMonster(monsterEncounter.MonsterID);
                 }
